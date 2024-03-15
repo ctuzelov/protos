@@ -175,3 +175,89 @@ var Auth_ServiceDesc = grpc.ServiceDesc{
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "sso/sso.proto",
 }
+
+// AppClient is the client API for App service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type AppClient interface {
+	Lauch(ctx context.Context, in *AppRequest, opts ...grpc.CallOption) (*AppResponse, error)
+}
+
+type appClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewAppClient(cc grpc.ClientConnInterface) AppClient {
+	return &appClient{cc}
+}
+
+func (c *appClient) Lauch(ctx context.Context, in *AppRequest, opts ...grpc.CallOption) (*AppResponse, error) {
+	out := new(AppResponse)
+	err := c.cc.Invoke(ctx, "/auth.App/Lauch", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// AppServer is the server API for App service.
+// All implementations must embed UnimplementedAppServer
+// for forward compatibility
+type AppServer interface {
+	Lauch(context.Context, *AppRequest) (*AppResponse, error)
+	mustEmbedUnimplementedAppServer()
+}
+
+// UnimplementedAppServer must be embedded to have forward compatible implementations.
+type UnimplementedAppServer struct {
+}
+
+func (UnimplementedAppServer) Lauch(context.Context, *AppRequest) (*AppResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Lauch not implemented")
+}
+func (UnimplementedAppServer) mustEmbedUnimplementedAppServer() {}
+
+// UnsafeAppServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to AppServer will
+// result in compilation errors.
+type UnsafeAppServer interface {
+	mustEmbedUnimplementedAppServer()
+}
+
+func RegisterAppServer(s grpc.ServiceRegistrar, srv AppServer) {
+	s.RegisterService(&App_ServiceDesc, srv)
+}
+
+func _App_Lauch_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AppRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AppServer).Lauch(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/auth.App/Lauch",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AppServer).Lauch(ctx, req.(*AppRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// App_ServiceDesc is the grpc.ServiceDesc for App service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var App_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "auth.App",
+	HandlerType: (*AppServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Lauch",
+			Handler:    _App_Lauch_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "sso/sso.proto",
+}

@@ -10,6 +10,19 @@ service Auth{
     rpc IsAdmin(IsAdminRequest) returns (IsAdminResponse);
 }
 
+service App{
+    rpc Lauch(AppRequest) returns (AppResponse);
+}
+
+message AppRequest{
+    string name = 1;
+    string secret = 2;
+}
+
+message AppResponse{
+    int64 app_id = 1;
+}
+
 message RegisterRequest{
     string email = 1;
     string password = 2;
