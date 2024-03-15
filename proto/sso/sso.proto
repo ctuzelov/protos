@@ -8,7 +8,7 @@ service Auth{
     rpc Register(RegisterRequest) returns (RegisterResponse);
     rpc Login(LoginRequest) returns (LoginResponse);
     rpc IsAdmin(IsAdminRequest) returns (IsAdminResponse);
-    rpc AppLauch(AppRequest) returns (AppResponse);
+    rpc AppLaunch(AppRequest) returns (AppResponse);
 }
 
 message AppRequest{

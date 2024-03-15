@@ -25,7 +25,7 @@ type AuthClient interface {
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	IsAdmin(ctx context.Context, in *IsAdminRequest, opts ...grpc.CallOption) (*IsAdminResponse, error)
-	AppLauch(ctx context.Context, in *AppRequest, opts ...grpc.CallOption) (*AppResponse, error)
+	AppLaunch(ctx context.Context, in *AppRequest, opts ...grpc.CallOption) (*AppResponse, error)
 }
 
 type authClient struct {
@@ -63,9 +63,9 @@ func (c *authClient) IsAdmin(ctx context.Context, in *IsAdminRequest, opts ...gr
 	return out, nil
 }
 
-func (c *authClient) AppLauch(ctx context.Context, in *AppRequest, opts ...grpc.CallOption) (*AppResponse, error) {
+func (c *authClient) AppLaunch(ctx context.Context, in *AppRequest, opts ...grpc.CallOption) (*AppResponse, error) {
 	out := new(AppResponse)
-	err := c.cc.Invoke(ctx, "/auth.Auth/AppLauch", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/auth.Auth/AppLaunch", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +79,7 @@ type AuthServer interface {
 	Register(context.Context, *RegisterRequest) (*RegisterResponse, error)
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
 	IsAdmin(context.Context, *IsAdminRequest) (*IsAdminResponse, error)
-	AppLauch(context.Context, *AppRequest) (*AppResponse, error)
+	AppLaunch(context.Context, *AppRequest) (*AppResponse, error)
 	mustEmbedUnimplementedAuthServer()
 }
 
@@ -96,8 +96,8 @@ func (UnimplementedAuthServer) Login(context.Context, *LoginRequest) (*LoginResp
 func (UnimplementedAuthServer) IsAdmin(context.Context, *IsAdminRequest) (*IsAdminResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method IsAdmin not implemented")
 }
-func (UnimplementedAuthServer) AppLauch(context.Context, *AppRequest) (*AppResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AppLauch not implemented")
+func (UnimplementedAuthServer) AppLaunch(context.Context, *AppRequest) (*AppResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AppLaunch not implemented")
 }
 func (UnimplementedAuthServer) mustEmbedUnimplementedAuthServer() {}
 
@@ -166,20 +166,20 @@ func _Auth_IsAdmin_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Auth_AppLauch_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Auth_AppLaunch_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AppRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServer).AppLauch(ctx, in)
+		return srv.(AuthServer).AppLaunch(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/auth.Auth/AppLauch",
+		FullMethod: "/auth.Auth/AppLaunch",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServer).AppLauch(ctx, req.(*AppRequest))
+		return srv.(AuthServer).AppLaunch(ctx, req.(*AppRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -204,8 +204,8 @@ var Auth_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Auth_IsAdmin_Handler,
 		},
 		{
-			MethodName: "AppLauch",
-			Handler:    _Auth_AppLauch_Handler,
+			MethodName: "AppLaunch",
+			Handler:    _Auth_AppLaunch_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
